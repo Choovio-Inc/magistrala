@@ -19,10 +19,16 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@/shared/*": ["./shared/*"],
-      "@/features/*": ["./features/*"],
-      "@/components/*": ["./components/*"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/contexts/*": ["./src/contexts/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/assets/*": ["./src/assets/*"]
     },
     "types": ["react", "node"]
   },
