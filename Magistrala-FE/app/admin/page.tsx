@@ -1,10 +1,11 @@
 'use client';
 
-import { PrivateRoute } from '@/components/auth/PrivateRoute';
+import { PrivateRoute } from '@/shared/components/auth/PrivateRoute';
 import { Sidebar } from '@/components/ui/sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { UserRole } from '@/shared/types/user';
 import { 
   Shield, 
   Users, 
@@ -14,12 +15,13 @@ import {
   Trash2,
   Edit
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminPage() {
   const { user } = useAuth();
 
   return (
-    <PrivateRoute allowedRoles={['admin']}>
+    <PrivateRoute allowedRoles={[UserRole.ADMIN]}>
       <div className="flex h-screen bg-gray-50">
         <div className="w-64 flex-shrink-0">
           <Sidebar />
@@ -40,11 +42,11 @@ export default function AdminPage() {
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-[#474dff] rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-medium">
-                    {user?.name?.charAt(0).toUpperCase()}
+                    {user?.firstName?.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">{user?.name}</p>
+                  <p className="text-sm font-medium">{user ? `${user.firstName} ${user.lastName}` : 'Admin'}</p>
                   <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
               </div>
@@ -71,10 +73,12 @@ export default function AdminPage() {
                       <Plus className="w-4 h-4 mr-2" />
                       Add User
                     </Button>
-                    <Button size="sm" variant="outline" className="w-full">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit Roles
-                    </Button>
+                    <Link href="/admin/roles">
+                      <Button size="sm" variant="outline" className="w-full">
+                        <Shield className="w-4 h-4 mr-2" />
+                        User Roles
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

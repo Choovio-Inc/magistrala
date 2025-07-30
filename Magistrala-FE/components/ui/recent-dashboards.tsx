@@ -11,7 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Thermometer } from 'lucide-react';
-import { useRecentDashboards } from '@/hooks/useDashboard';
+import { useRecentDashboards } from '@/shared/hooks/useDashboard';
 import { formatDistanceToNow } from 'date-fns';
 
 const getDashboardIcon = (type: string) => {

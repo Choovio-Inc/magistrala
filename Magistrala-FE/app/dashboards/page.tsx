@@ -1,18 +1,52 @@
 'use client';
 
-import { PrivateRoute } from '@/components/auth/PrivateRoute';
-import { UserRole } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { PrivateRoute } from '@/shared/components/auth/PrivateRoute';
+import { UserRole } from '@/shared/types/user';
+import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from '@/components/ui/sidebar';
+import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRecentDashboards } from '@/hooks/useDashboard';
+import { useRecentDashboards } from '@/shared/hooks/useDashboard';
 import { Thermometer, Zap, Activity, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardsPage() {
   const { data: dashboards, isLoading } = useRecentDashboards();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect users based on their role
+  useEffect(() => {
+    if (user) {
+      if (user.role === UserRole.ADMIN) {
+        router.push('/');
+      } else if (user.role === UserRole.USER) {
+        router.push('/user-dashboard');
+      }
+    }
+  }, [user, router]);
+
+  // Show loading while redirecting
+  if (user) {
+    return (
+      <div className="flex h-screen bg-gray-50">
+        <div className="w-64 flex-shrink-0">
+          <Sidebar />
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#474dff] mx-auto mb-4"></div>
+            <p className="text-gray-600">Redirecting to your dashboard...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <PrivateRoute allowedRoles={[UserRole.ADMIN, UserRole.CUSTOMER]}>
+    <PrivateRoute allowedRoles={[UserRole.ADMIN, UserRole.USER]}>
       <div className="flex h-screen bg-gray-50">
         <div className="w-64 flex-shrink-0">
           <Sidebar />

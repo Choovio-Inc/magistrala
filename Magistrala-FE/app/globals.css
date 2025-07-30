@@ -80,3 +80,70 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Pill-shaped design system */
+@layer components {
+  .pill-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid #E5E7EB;
+    transition: all 0.3s ease;
+  }
+
+  .pill-card:hover {
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-pill {
+    background: transparent !important;
+    border-radius: 12px;
+    margin: 2px 8px;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+    border: none !important;
+    box-shadow: none !important;
+    width: calc(100% - 16px) !important;
+  }
+
+  .sidebar-pill:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(4px);
+    box-shadow: none !important;
+  }
+
+  .sidebar-pill.active {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .profile-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .profile-section:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .pill-button {
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    transition: all 0.3s ease;
+  }
+
+  .pill-button:hover {
+    background: #F9FAFB;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+

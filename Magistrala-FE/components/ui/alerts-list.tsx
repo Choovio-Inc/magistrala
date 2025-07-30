@@ -3,9 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Info, XCircle } from 'lucide-react';
-import { useAlerts } from '@/hooks/useDashboard';
+import { useAlerts } from '@/shared/hooks/useDashboard';
 import { formatDistanceToNow } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/utils/utils';
 
 const getAlertIcon = (type: string) => {
   switch (type) {
@@ -25,7 +25,7 @@ const getAlertColor = (type: string) => {
     case 'error':
       return 'bg-red-100 text-red-800 hover:bg-red-100';
     default:
-      return 'bg-blue-100 text-blue-800 hover:bg-blue-100';
+      return 'bg-[#474dff]/10 text-[#474dff] hover:bg-[#474dff]/10';
   }
 };
 

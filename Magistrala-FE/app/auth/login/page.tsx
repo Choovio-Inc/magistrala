@@ -39,11 +39,32 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#474dff] to-[#6366f1] p-4">
+      {/* Demo Credentials Card */}
+      <Card className="w-full max-w-sm mr-4 bg-[#474dff]/5 border-[#474dff]/20">
+        <CardHeader>
+          <CardTitle className="text-lg text-[#474dff]">Demo Credentials</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p className="font-semibold text-[#474dff]">Admin Access:</p>
+              <p className="text-[#474dff]/80">Email: sri@choovio.com</p>
+              <p className="text-[#474dff]/80">Password: admin123</p>
+            </div>
+            <div>
+              <p className="font-semibold text-[#474dff]">User Access:</p>
+              <p className="text-[#474dff]/80">Email: user@choovio.com</p>
+              <p className="text-[#474dff]/80">Password: user123</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <div className="w-32 h-24 mx-auto mb-6">
             <Image 
-              src="/logo.png" 
+              src="/logo1.png" 
               alt="Logo" 
               width={128} 
               height={96}

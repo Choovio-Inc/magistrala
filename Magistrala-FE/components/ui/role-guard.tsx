@@ -1,6 +1,7 @@
 'use client';
 
-import { useAuth, UserRole } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { UserRole } from '@/shared/types/user';
 import { ReactNode } from 'react';
 
 interface RoleGuardProps {

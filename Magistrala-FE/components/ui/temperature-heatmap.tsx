@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/utils/utils';
 
 interface HeatmapCell {
   temperature: number;
@@ -16,14 +16,14 @@ const mockHeatmapData: HeatmapCell[] = [
 ];
 
 const getTemperatureColor = (temp: number) => {
-  if (temp <= 24) return 'bg-blue-200 text-blue-800'; // Cool
+      if (temp <= 24) return 'bg-[#474dff]/20 text-[#474dff]'; // Cool
   if (temp <= 27) return 'bg-green-200 text-green-800'; // Normal
   if (temp <= 29) return 'bg-yellow-200 text-yellow-800'; // Warm
   return 'bg-red-200 text-red-800'; // Hot
 };
 
 const temperatureRanges = [
-  { label: 'Cool (20-24°C)', color: 'bg-blue-200' },
+      { label: 'Cool (20-24°C)', color: 'bg-[#474dff]/20' },
   { label: 'Normal (25-27°C)', color: 'bg-green-200' },
   { label: 'Warm (28-29°C)', color: 'bg-yellow-200' },
   { label: 'Hot (30°C+)', color: 'bg-red-200' },

@@ -45,12 +45,12 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#474dff] to-[#6366f1] p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <div className="w-32 h-24 mx-auto mb-6">
+          <div className="w-48 h-36 mx-auto mb-8 flex items-center justify-center">
             <Image 
               src="/logo.png" 
               alt="Logo" 
-              width={128} 
-              height={96}
+              width={192} 
+              height={144}
               className="w-full h-full object-contain"
             />
           </div>

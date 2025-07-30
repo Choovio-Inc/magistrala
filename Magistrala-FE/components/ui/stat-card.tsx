@@ -1,8 +1,8 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { DivideIcon as LucideIcon } from 'lucide-react';
+import { cn } from '@/shared/utils/utils';
+import { LucideIcon } from 'lucide-react';
 
 interface StatCardProps {
   title: string;
@@ -46,8 +46,8 @@ export function StatCard({
               </div>
             </div>
           </div>
-          <div className="p-3 bg-blue-50 rounded-lg">
-            <Icon className="h-6 w-6 text-blue-600" />
+                  <div className="p-3 bg-[#474dff]/5 rounded-lg">
+          <Icon className="h-6 w-6 text-[#474dff]" />
           </div>
         </div>
       </CardContent>

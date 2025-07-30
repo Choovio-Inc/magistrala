@@ -2,13 +2,8 @@
 
 import * as React from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { authService } from '@/services/auth';
-
-// Define user roles
-export enum UserRole {
-  ADMIN = 'admin',
-  CUSTOMER = 'customer',
-}
+import { authService } from '@/shared/services/auth';
+import { User, UserRole, UserStatus, UserCredentials } from '@/shared/types/user';
 
 // Define JWT token payload interface
 interface JWTPayload {
@@ -21,13 +16,8 @@ interface JWTPayload {
   email?: string;
 }
 
-// Define user interface
-export interface User {
-  id: string;
-  name?: string;
-  role: UserRole;
-  organizationId: string;
-}
+// Export enums for backward compatibility (components should import User directly from @/types/user)
+export { UserRole, UserStatus } from '@/shared/types/user';
 
 // Define auth context interface
 interface AuthContextType {
@@ -35,7 +25,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
-  isCustomer: boolean;
+  isUser: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: string) => Promise<void>;
   logout: () => void;
@@ -54,11 +44,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Initialize auth state from localStorage on mount
   React.useEffect(() => {
     const savedToken = localStorage.getItem('auth_token');
-    if (savedToken) {
-      const isValid = validateAndSetToken(savedToken);
-      if (!isValid) {
-        // Clear invalid token
+    const savedUserData = localStorage.getItem('user_data');
+    
+    if (savedToken && savedUserData) {
+      try {
+        // Validate the token first
+        const isValid = validateAndSetToken(savedToken);
+        if (!isValid) {
+          // If token is invalid, clear the data
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('user_data');
+          setUser(null);
+          setToken(null);
+        }
+      } catch (error) {
+        console.error('Error validating saved token:', error);
+        // Clear invalid data
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
+        setUser(null);
+        setToken(null);
       }
     }
   }, []);
@@ -82,7 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Validate role
-      if (!Object.values(UserRole).includes(decoded.role as UserRole)) {
+      const roleValue = parseInt(decoded.role);
+      if (!Object.values(UserRole).includes(roleValue)) {
         console.error('Invalid token: invalid role');
         return false;
       }
@@ -90,9 +96,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Set user and token
       const userData: User = {
         id: decoded.user_id,
-        name: decoded.name || decoded.email || undefined,
-        role: decoded.role as UserRole,
+        firstName: decoded.name || 'User',
+        lastName: '',
+        email: decoded.email || '',
+        role: roleValue,
         organizationId: decoded.organization_id,
+        status: UserStatus.ENABLED,
+        credentials: { username: decoded.email || '', secret: '' },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       setUser(userData);
@@ -143,14 +155,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
       
-      // Validate and set the token from the response
+      // Validate and set the token
       const isValid = validateAndSetToken(loginResponse.access_token);
       if (!isValid) {
         throw new Error('Invalid token received from server');
       }
       
-      // Store the token in localStorage
+      // Store both in localStorage
       localStorage.setItem('auth_token', loginResponse.access_token);
+      localStorage.setItem('user_data', JSON.stringify(loginResponse.user));
     } catch (error) {
       console.error('Error during login:', error);
       throw error;
@@ -162,8 +175,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
     // Redirect to login page
-    window.location.href = '/login';
+    window.location.href = '/auth/login';
   };
 
   // Check if user has any of the specified roles
@@ -216,7 +230,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token,
     isAuthenticated: !!user && !!token,
     isAdmin: user?.role === UserRole.ADMIN,
-    isCustomer: user?.role === UserRole.CUSTOMER,
+    isUser: user?.role === UserRole.USER,
     login,
     register,
     logout,
@@ -314,8 +328,8 @@ export function AdminOnly({
   );
 }
 
-// Customer-only component wrapper
-export function CustomerOnly({ 
+// User-only component wrapper
+export function UserOnly({ 
   children, 
   fallback = null 
 }: { 
@@ -323,13 +337,13 @@ export function CustomerOnly({
   fallback?: React.ReactNode;
 }) {
   return (
-    <RoleGuard allowedRoles={[UserRole.CUSTOMER]} fallback={fallback}>
+    <RoleGuard allowedRoles={[UserRole.USER]} fallback={fallback}>
       {children}
     </RoleGuard>
   );
 }
 
-// Admin or Customer component wrapper
+// Admin or User component wrapper
 export function AuthorizedOnly({ 
   children, 
   fallback = null 
@@ -338,7 +352,7 @@ export function AuthorizedOnly({
   fallback?: React.ReactNode;
 }) {
   return (
-    <RoleGuard allowedRoles={[UserRole.ADMIN, UserRole.CUSTOMER]} fallback={fallback}>
+    <RoleGuard allowedRoles={[UserRole.ADMIN, UserRole.USER]} fallback={fallback}>
       {children}
     </RoleGuard>
   );
